@@ -1,0 +1,170 @@
+Motorcycle
+
+MotorcycleImpl is a base class for any type of motorcycle and it should not be able to be instantiated.
+Data
+•	model – String – All models are unique
+•	horsePower – int (every type of motorcycle has a different range of valid horsepower. If the horsepower is
+not in the valid range, throw an IllegalArgumentException with message "Invalid horse power: {horsepower}.")
+•	cubicCentimeters – double(every type of motorcycle has different cubic centimeters)
+Behavior
+double calculateRacePoints(int laps)
+The calculateRacePoints calculates the race points in the concrete race with this formula:
+cubic centimeters / horsepower * laps
+
+Child Classes
+There are several concrete types of motorcycles:
+
+PowerMotorcycle
+The cubic centimeters for this type of motorcycle are 450. Minimum horsepower is 70 and maximum horsepower is 100.
+If you receive horsepower which is not in the given range throw IllegalArgumentException with message "Invalid horse
+power: {horsepower}.".
+SpeedMotorcycle
+The cubic centimeters for this type of motorcycle are 125. Minimum horsepower is 50 and maximum horsepower is 69.
+If you receive horsepower which is not in the given range throw IllegalArgumentException with message "Invalid horse
+power: {horsepower}.".
+
+RiderImpl
+Data
+•	name – String – All names are unique
+•	motorcycle – Motorcycle
+•	numberOfWins – int
+•	canParticipate – boolean (default behaviour is false). A rider can participate in a race, ONLY if he has motorcycle
+Behavior
+void addMotorcycle(Motorcycle motorcycle)
+This method adds a motorcycle to a rider. If a motorcycle from method parameters is null, throw NullPointerException
+with message "Motorcycle cannot be null.".
+If motorcycle is not null, save it and after that rider can participate to race.
+void winRace()
+When a rider wins a race, the number of wins should be increased with one.
+
+RaceImpl
+Data
+•	name – String  – All names are unique
+•	laps – int
+•	riders – Collection of riders
+Behavior
+void addRider(Rider rider)
+This method adds a rider to the race if the rider is valid. If the rider is not valid, throw exception with the
+ appropriate message. Exceptions are:
+•	If the rider is null throw NullPointerException with message "Rider cannot be null."
+•	If the rider cannot participate to race (rider has not motorcycle) throw IllegalArgumentException with message
+ "Rider {rider name} could not participate in race."
+•	If the rider already exists in the race throw IllegalArgumentException with message
+"Rider {rider name} is already added in {race name} race."
+
+Repository
+The repository holds information for the entity.
+Data
+•	models – collection of T (entity)
+Behavior
+void add(T model)
+Adds an entity in the collection.
+boolean remove(T model)
+Removes an entity from the collection.
+T getByName(String name)
+Returns an entity with that name.
+Collection<T> getAll()
+Returns all entities (unmodifiable)
+
+Child Classes
+Create Motorcycle, Rider and Race repositories.
+
+The Controller Class
+The business logic of the program should be concentrated around several commands. You are given interfaces,
+which you have to implement in the correct classes.
+The first interface is ChampionshipController. You must implement a ChampionshipControllerImpl class
+
+Commands
+
+CreateRider Command
+Parameters
+•	riderName – String
+Functionality
+Creates a rider with the given name and adds it to the appropriate repository.
+The method should return the following message:
+"Rider {name} is created."
+If already have rider with given name in the rider repository, throw IllegalArgumentException with message
+"Rider {name} is already created."
+
+CreateMotorcycle Command
+Parameters
+•	type - String
+•	model – String
+•	horsePower - int
+Functionality
+Create a motorcycle with the provided model and horsepower and add it to the repository. There are two types of motorcycle: "Speed" and "Power".
+If the motorcycle already exists in the appropriate repository throw IllegalArgumentException with following message:
+"Motorcycle {model} is already created."
+If the motorcycle is successfully created, the method should return the following message:
+"{"SpeedMotorcycle"/ "PowerMotorcycle"} {model} is created."
+
+AddMotorcycleToRider Command
+Parameters
+•	riderName – String
+•	motorcycleModel- String
+Functionality
+Gives the motorcycle with given name to the rider with given name (if exists).
+If the rider does not exist in rider repository, throw NullPointerException with message
+•	"Rider {name} could not be found."
+If the motorcycle does not exist in motorcycle repository, throw NullPointerException with message
+•	"Motorcycle {name} could not be found."
+If everything is successful you should add the motorcycle to the rider and return the following message:
+•	"Rider {rider name} received motorcycle {motorcycle name}."
+
+AddRiderToRace Command
+Parameters
+•	raceName – String
+•	riderName - String
+Functionality
+Adds rider to the race.
+If the race does not exist in race repository, throw NullPointerException with message
+•	"Race {name} could not be found."
+If the rider does not exist in rider repository, throw NullPointerException with message
+•	"Rider {name} could not be found."
+If everything is successful you should add the rider to the race and return the following message:
+•	"Rider {rider name} added in {race name} race."
+
+CreateRace Command
+Parameters
+•	name – String
+•	laps – int
+Functionality
+Creates race with given name and laps and adds to race repository.
+If race with given name already exists throw IllegalArgumentException with message:
+•	"Race {name} is already created."
+If everything is successful you should return the following message:
+•	"Race {name} is created."
+StartRace Command
+Parameters
+•	raceName – String
+Functionality
+This method is the most important one. If everything is valid, you should arrange all riders and then return the
+three fastest riders. In order to do this you should sort all riders in descending order by the result of
+calculateRacePoints method in motorcycle object. At the end if everything is valid remove this race from race repository.
+If the race does not exist in race repository, throw NullPointerException with message:
+•	"Race {name} could not be found."
+If the participants in the race are less than 3, throw IllegalArgumentException with message:
+•	"Race {race name} cannot start with less than 3 participants."
+
+If everything is successful you should return the following message:
+•	"Rider {first rider name} wins {race name} race."
+"Rider {second rider name} is second in {race name} race."
+"Rider {third rider name} is third in {race name} race."
+End Command
+Exit the program.
+Input / Output
+You are provided with one interface, which will help with the correct execution process of your program.
+The interface is Engine and the class implementing this interface should read the input and when the program finishes,
+ this class should print the output.
+Input
+Below, you can see the format in which each command will be given in the input:
+•	CreateRider {name}
+•	CreateMotorcycle {motorcycle type} {model} {horsepower}
+•	AddMotorcycleToRider {rider name} {motorcycle name}
+•	AddRiderToRace {race name} {rider name}
+•	CreateRace {name} {laps}
+•	StartRace {race name}
+•	End
+Output
+Print the output from each command when issued. If an exception is thrown during any of the commands’ execution,
+print the exception message.
